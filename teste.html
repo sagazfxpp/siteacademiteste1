@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receitas Personalizadas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #18181b;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #262626;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    nav ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+     nav ul li {
+         display: inline;
+    }
+    nav ul li a {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+    nav ul li a:hover {
+        color: rgb(9, 255, 0);
+    }
+    .container {
+      padding: 20px;
+    }
+    .search-bar {
+      width: 100%;
+      padding: 10px;
+      margin: 20px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    .recipes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .recipe-card {
+      width: 30%;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .recipe-card h3 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Receitas Personalizadas para Seu Objetivo</h1>
+    <p>Descubra as melhores receitas para ganhar, perder ou manter peso.</p>
+    <nav>
+        <ul>
+            <li><a href="index.html">voltar</a></li>
+        </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <input type="text" id="search" class="search-bar" placeholder="Pesquise por receitas..." onkeyup="searchRecipes()" />
+
+    <div id="recipe-list" class="recipes">
+      <!-- As receitas serão exibidas aqui -->
+    </div>
+  </div>
+
+  <script>
+    // Lista de receitas com nome, descrição e calorias
+    const recipes = [
+  { name: "Bolo de Cenoura", description: "Bolo de cenoura fofinho e saudável, ideal para um lanche.", calories: 180 },
+  { name: "Salada de Folhas Verdes", description: "Salada simples com alface, rúcula e agrião, ideal para perder peso.", calories: 50 },
+  { name: "Sopa de Legumes", description: "Sopa nutritiva e leve, excelente para quem busca emagrecer.", calories: 150 },
+  { name: "Frango ao Curry", description: "Frango temperado com curry e leite de coco, ótimo para ganhar massa muscular.", calories: 250 },
+  { name: "Tapioca de Banana", description: "Tapioca com banana e canela, excelente para um café da manhã nutritivo.", calories: 200 },
+  { name: "Cuscuz de Frango", description: "Cuscuz de frango com vegetais, ótimo para quem está em dieta de manutenção de peso.", calories: 220 },
+  { name: "Wrap de Frango e Abacate", description: "Wrap saudável com frango, abacate e folhas, ótimo para quem busca perder peso.", calories: 230 },
+  { name: "Batata Doce Assada", description: "Batata doce assada com ervas, ideal para quem quer aumentar a massa muscular.", calories: 180 },
+  { name: "Muffin Integral", description: "Muffin saudável de aveia e banana, ótimo para um lanche rápido.", calories: 210 },
+  { name: "Quinoa com Legumes", description: "Quinoa com legumes variados, nutritiva e leve, ideal para quem quer perder peso.", calories: 240 },
+  { name: "Chá Verde com Limão", description: "Chá verde refrescante com limão, ajuda no emagrecimento e acelera o metabolismo.", calories: 0 },
+  { name: "Salada de Atum", description: "Salada com atum, vegetais e azeite de oliva, perfeita para quem busca manter o peso.", calories: 180 },
+  { name: "Arroz de Couve-flor", description: "Arroz de couve-flor, uma alternativa low carb e saudável.", calories: 100 },
+  { name: "Salmon Bowl", description: "Salmão fresco com arroz integral e legumes, rico em ômega 3.", calories: 300 },
+  { name: "Peixe Grelhado com Brócolis", description: "Peixe grelhado acompanhado de brócolis cozidos, ideal para quem quer emagrecer.", calories: 250 },
+  { name: "Panqueca de Aveia com Mel", description: "Panqueca de aveia saudável com mel, excelente para um café da manhã rápido.", calories: 230 },
+  { name: "Espaguete de Abobrinha com Molho", description: "Espaguete de abobrinha com molho leve, ideal para quem está em dieta de emagrecimento.", calories: 160 },
+  { name: "Carne de Soja", description: "Carne de soja preparada com temperos naturais, ótima opção vegana e rica em proteínas.", calories: 200 },
+  { name: "Iogurte com Granola", description: "Iogurte natural com granola, ótimo para o café da manhã ou lanche da tarde.", calories: 220 },
+  { name: "Mousse de Maracujá Diet", description: "Mousse de maracujá sem açúcar, ideal para quem está de dieta.", calories: 100 },
+  { name: "Açaí com Granola", description: "Açaí com granola e frutas, uma opção energética e refrescante.", calories: 280 },
+  { name: "Pão Integral com Abacate", description: "Pão integral com abacate, ideal para quem busca uma refeição saudável.", calories: 180 },
+  { name: "Salmão ao Forno com Ervas", description: "Salmão assado com ervas finas e azeite de oliva, rico em proteínas e ômega 3.", calories: 290 },
+  { name: "Creme de Abóbora", description: "Creme de abóbora saudável e baixo em calorias, ideal para quem busca emagrecer.", calories: 150 },
+  { name: "Chili Vegetariano", description: "Chili vegetariano com feijão, tomates e especiarias, perfeito para quem quer perder peso.", calories: 200 },
+  { name: "Lentilha com Legumes", description: "Lentilha com legumes variados, rica em proteínas e fibras, ótima para quem busca manter o peso.", calories: 210 },
+  { name: "Arroz de Quinoa", description: "Quinoa cozida com especiarias, uma ótima alternativa ao arroz tradicional.", calories: 180 },
+  { name: "Wrap de Legumes", description: "Wrap recheado com legumes frescos e temperos, perfeito para quem está em dieta vegana.", calories: 160 },
+  { name: "Bife de Frango com Abobrinha", description: "Bife de frango grelhado acompanhado de abobrinha, ideal para uma refeição leve e saudável.", calories: 220 },
+  { name: "Bife Acebolado com Arroz Integral", description: "Bife acebolado com arroz integral, nutritivo e excelente para quem deseja ganhar massa muscular.", calories: 280 },
+  { name: "Chá de Camomila", description: "Chá calmante de camomila, ideal para relaxar antes de dormir.", calories: 0 },
+  { name: "Panqueca de Coco", description: "Panqueca de coco low carb, ideal para quem está em dieta.", calories: 210 },
+  { name: "Bolinho de Arroz Integral", description: "Bolinho de arroz integral assado, ideal para um lanche saudável.", calories: 180 },
+  { name: "Filé de Peixe com Aspargos", description: "Filé de peixe grelhado com aspargos, ideal para quem está em dieta de emagrecimento.", calories: 250 },
+  { name: "Sopa de Abobrinha", description: "Sopa leve e nutritiva feita com abobrinha, ideal para quem busca perder peso.", calories: 140 },
+  { name: "Lanche de Abacate com Tomate", description: "Lanche simples de abacate com tomate e especiarias, ideal para quem busca uma refeição rápida.", calories: 180 },
+  { name: "Espaguete de Abobrinha com Molho Pesto", description: "Espaguete de abobrinha com molho pesto caseiro, leve e saudável.", calories: 200 },
+  { name: "Sopa de Frango com Legumes", description: "Sopa de frango com legumes variados, nutritiva e ideal para quem deseja perder peso.", calories: 220 },
+  { name: "Ceviche de Manga", description: "Ceviche refrescante de manga e peixe, excelente para um lanche saudável.", calories: 180 },
+  { name: "Peixe ao Curry", description: "Peixe ao curry com leite de coco, perfeito para quem está em dieta de emagrecimento.", calories: 250 },
+  { name: "Bolinhos de Frango", description: "Bolinhos assados de frango com legumes, ideais para um lanche saudável.", calories: 220 },
+  { name: "Arroz de Brócolis", description: "Arroz de brócolis, uma alternativa saudável e nutritiva.", calories: 180 },
+  { name: "Crepioca de Frango", description: "Crepioca recheada com frango, ideal para o café da manhã ou lanche pós-treino.", calories: 200 },
+  { name: "Bowl de Frutas", description: "Bowl com frutas frescas e granola, ideal para um lanche energético.", calories: 150 },
+  { name: "Arroz de Lentilha", description: "Arroz de lentilha com temperos, rica em proteínas e fibras.", calories: 210 },
+  { name: "Salada de Frutas", description: "Salada de frutas frescas com mel, excelente para o lanche da tarde.", calories: 120 },
+  { name: "Bife de Carne Moída", description: "Bife de carne moída com abóbora, ideal para quem busca perder peso.", calories: 230 },
+  { name: "Creme de Espinafre", description: "Creme de espinafre low carb, ideal para quem está em dieta de emagrecimento.", calories: 170 },
+  { name: "Torta de Legumes", description: "Torta de legumes assada, excelente para um almoço nutritivo e saudável.", calories: 220 },
+  { name: "Hambúrguer de Lentilha", description: "Hambúrguer caseiro de lentilha, ideal para quem está em dieta vegetariana.", calories: 180 },
+  { name: "Omelete de Cogumelos", description: "Omelete leve de cogumelos e queijo, excelente para um lanche saudável.", calories: 250 },
+  { name: "Chá de Gengibre", description: "Chá quente de gengibre, ideal para quem deseja acelerar o metabolismo.", calories: 0 },
+  { name: "Bolinho de Grão-de-Bico", description: "Bolinho assado de grão-de-bico, ótimo para um lanche saudável.", calories: 200 },
+  { name: "Feijão Tropeiro", description: "Feijão tropeiro com ovo e bacon, uma receita simples e deliciosa.", calories: 300 },
+  { name: "Salada de Quinoa", description: "Salada de quinoa com vegetais, rica em fibras e ideal para manter o peso.", calories: 250 },
+  { name: "Biscoito de Polvilho", description: "Biscoito de polvilho caseiro, ideal para um lanche rápido e leve.", calories: 120 },
+  { name: "Abacate com Cacau", description: "Abacate com cacau em pó, ideal para quem quer um lanche energético.", calories: 200 },
+  { name: "Pão de Alho Light", description: "Pão de alho saudável e leve, sem exageros de calorias.", calories: 180 },
+  { name: "Bolinho de Batata Doce", description: "Bolinho assado de batata doce, ideal para um lanche saudável e energético.", calories: 220 },
+  { name: "Frango com Abóbora", description: "Frango grelhado acompanhado de abóbora, ideal para uma refeição saudável e balanceada.", calories: 250 },
+  { name: "Mingau de Milho", description: "Mingau de milho cremoso e saudável, ótimo para o café da manhã.", calories: 200 },
+  { name: "Bolo de Banana", description: "Bolo de banana fofinho e saudável, ideal para o café da manhã.", calories: 150 },
+  { name: "Bolo de Abobrinha", description: "Bolo leve e saboroso com abobrinha, ótimo para um lanche saudável.", calories: 160 },
+  { name: "Bolo de Maçã com Canela", description: "Bolo de maçã com canela, saudável e delicioso, perfeito para o lanche da tarde.", calories: 140 },
+  { name: "Bolo de Laranja Integral", description: "Bolo de laranja integral, saudável e fofinho, ideal para quem busca um lanche leve.", calories: 170 },
+  { name: "Bolo de Iogurte", description: "Bolo fofinho de iogurte, simples e saudável, perfeito para o café da manhã.", calories: 160 },
+  { name: "Bolo de Abacaxi com Coco", description: "Bolo de abacaxi e coco, refrescante e saudável, ideal para um lanche tropical.", calories: 180 },
+  { name: "Bolo de Cenoura com Chocolate", description: "Bolo de cenoura fofinho com um toque de chocolate, delicioso e saudável.", calories: 190 },
+  { name: "Bolo de Beterraba", description: "Bolo de beterraba, rico em nutrientes, perfeito para quem busca uma opção saudável.", calories: 160 },
+  { name: "Bolo de Morango", description: "Bolo de morango fresco e saudável, ideal para uma tarde de verão.", calories: 150 },
+  { name: "Bolo de Fubá", description: "Bolo de fubá fofinho, simples e saudável, ideal para o café da manhã.", calories: 170 },
+  { name: "Bolo de Limão", description: "Bolo de limão refrescante e leve, ideal para um lanche saudável.", calories: 140 },
+  { name: "Bolo de Coco", description: "Bolo de coco fofinho e saboroso, perfeito para quem adora uma opção saudável.", calories: 180 },
+  { name: "Bolo de Aveia", description: "Bolo de aveia macio e nutritivo, ótimo para o café da manhã.", calories: 160 },
+  { name: "Bolo de Pera", description: "Bolo de pera suave e saudável, ideal para um lanche leve.", calories: 150 },
+  { name: "Bolo de Maçã e Aveia", description: "Bolo de maçã com aveia, saudável e delicioso, ótimo para o café da manhã.", calories: 170 },
+  { name: "Bolo de Maracujá", description: "Bolo de maracujá leve e refrescante, perfeito para quem busca uma opção saudável.", calories: 160 },
+  { name: "Bolo de Ricota", description: "Bolo de ricota fofinho e nutritivo, ideal para um lanche leve e saudável.", calories: 180 },
+  { name: "Bolo de Chocolate Amargo", description: "Bolo de chocolate amargo saudável, com menos açúcar e muito sabor.", calories: 200 },
+  { name: "Bolo de Pêssego", description: "Bolo de pêssego macio e delicioso, ótimo para um lanche leve.", calories: 160 },
+  { name: "Bolo de Grão-de-Bico", description: "Bolo de grão-de-bico saudável e fofinho, ideal para quem busca uma opção mais proteica.", calories: 180 },
+  { name: "Smoothie de Whey com Banana", description: "Smoothie cremoso com Whey Protein e banana, ideal para o pós-treino.", calories: 250 },
+  { name: "Shake de Morango com Creatina", description: "Shake de morango com creatina, ótimo para energia extra e recuperação muscular.", calories: 200 },
+  { name: "Smoothie de Abacaxi com Whey", description: "Smoothie refrescante de abacaxi e Whey Protein, perfeito para um lanche pós-treino.", calories: 230 },
+  { name: "Shake de Chocolate com Whey", description: "Shake de chocolate amargo com Whey, ideal para repor proteínas após o treino.", calories: 260 },
+  { name: "Smoothie Verde com Whey", description: "Smoothie de espinafre, abacaxi e Whey, saudável e rico em nutrientes.", calories: 220 },
+  { name: "Shake de Pêssego com Creatina", description: "Shake de pêssego com creatina, ótimo para aumentar a força e energia.", calories: 210 },
+  { name: "Smoothie de Morango com Colágeno", description: "Smoothie de morango com colágeno, bom para a pele e articulações.", calories: 180 },
+  { name: "Shake de Baunilha com Whey e Manteiga de Amendoim", description: "Shake de baunilha com Whey e manteiga de amendoim, perfeito para aumentar a ingestão de proteínas.", calories: 280 },
+  { name: "Smoothie de Manga com Creatina", description: "Smoothie de manga com creatina, ideal para dar mais energia e força.", calories: 220 },
+  { name: "Shake de Coco com Whey", description: "Shake de coco com Whey Protein, cremoso e nutritivo, perfeito para o café da manhã.", calories: 240 },
+  { name: "Smoothie de Abacate com Proteína", description: "Smoothie de abacate com proteína isolada, ótimo para um lanche saudável e energético.", calories: 270 },
+  { name: "Shake de Limão com Whey", description: "Shake refrescante de limão com Whey Protein, ideal para hidratar e nutrir o corpo.", calories: 200 },
+  { name: "Smoothie de Morango com L-Carnitina", description: "Smoothie de morango com L-Carnitina, perfeito para quem quer emagrecer e ganhar energia.", calories: 190 },
+  { name: "Shake de Café com Whey", description: "Shake energizante de café com Whey, ideal para começar o dia com energia.", calories: 220 },
+  { name: "Smoothie de Banana com Creatina", description: "Smoothie de banana com creatina, excelente para recuperação muscular e aumento de força.", calories: 230 },
+  { name: "Shake de Framboesa com Whey", description: "Shake de framboesa com Whey Protein, refrescante e ideal para o pós-treino.", calories: 210 },
+  { name: "Smoothie de Abóbora com Proteína", description: "Smoothie de abóbora com proteína isolada, perfeito para quem busca algo saudável e nutritivo.", calories: 240 },
+  { name: "Vitamina de Banana com Whey", description: "Vitamina cremosa com banana e Whey Protein, ideal para o café da manhã ou pós-treino.", calories: 220 },
+  { name: "Vitamina de Abacaxi com Creatina", description: "Vitamina de abacaxi com creatina, ótima para dar mais energia e ajudar na recuperação muscular.", calories: 210 },
+  { name: "Vitamina de Morango com Colágeno", description: "Vitamina de morango com colágeno, excelente para a pele e articulações, além de ser nutritiva.", calories: 180 },
+  { name: "Vitamina de Manga com Whey", description: "Vitamina de manga com Whey Protein, refrescante e nutritiva, perfeita para o pós-treino.", calories: 240 },
+  { name: "Vitamina Verde com Whey", description: "Vitamina de espinafre, abacaxi e Whey, cheia de nutrientes e ideal para o aumento de energia.", calories: 230 },
+  { name: "Vitamina de Limão com Creatina", description: "Vitamina de limão com creatina, refrescante e energizante, ideal para quem precisa de energia extra.", calories: 200 },
+  { name: "Vitamina de Framboesa com Proteína Isolada", description: "Vitamina de framboesa com proteína isolada, saudável e rica em antioxidantes.", calories: 220 },
+  { name: "Vitamina de Abacate com Whey", description: "Vitamina cremosa de abacate com Whey, rica em gorduras saudáveis e proteínas.", calories: 260 },
+  { name: "Vitamina de Pêssego com Creatina", description: "Vitamina de pêssego com creatina, ideal para quem busca mais força e recuperação muscular.", calories: 210 },
+  { name: "Vitamina de Kiwi com Whey", description: "Vitamina de kiwi com Whey Protein, cheia de vitamina C e proteínas, excelente para o pós-treino.", calories: 240 },
+  { name: "Salada de Frango com Quinoa", description: "Salada saudável com peito de frango grelhado, quinoa, espinafre e molho de limão, rica em proteínas e fibras.", calories: 350 },
+  { name: "Peito de Frango com Batata Doce e Brócolis", description: "Peito de frango grelhado com batata doce e brócolis, uma refeição rica em proteínas e carboidratos complexos.", calories: 400 },
+  { name: "Omelete de Clara com Legumes", description: "Omelete de clara de ovo com espinafre, cogumelos, pimentão e cebola, rica em proteínas e nutrientes.", calories: 300 },
+  { name: "Salada de Atum com Abacate", description: "Salada de atum com abacate, pepino, tomate e alface, ótima para quem busca uma refeição leve e nutritiva.", calories: 350 },
+  { name: "Arroz Integral com Peito de Peru e Vegetais", description: "Arroz integral com peito de peru grelhado e vegetais como cenoura, brócolis e abobrinha.", calories: 380 },
+  { name: "Frango Grelhado com Purê de Abóbora", description: "Frango grelhado acompanhado de purê de abóbora, uma refeição balanceada e rica em proteínas.", calories: 350 },
+  { name: "Salada de Grão-de-Bico com Legumes", description: "Salada de grão-de-bico com pepino, tomate, cebola roxa e azeite de oliva, rica em proteínas vegetais.", calories: 300 },
+  { name: "Peixe Grelhado com Arroz de Couve-Flor", description: "Peixe grelhado acompanhado de arroz de couve-flor, uma opção low-carb e cheia de proteínas.", calories: 330 },
+  { name: "Strogonoff de Frango Light", description: "Strogonoff de frango light com creme de ricota e arroz integral, uma versão saudável e saborosa.", calories: 400 },
+  { name: "Quinoa com Frango e Legumes", description: "Quinoa com frango grelhado e legumes variados, uma refeição rica em proteínas e fibras.", calories: 360 },
+  { name: "Salada de Quinoa com Frango e Abacate", description: "Salada de quinoa com frango grelhado, abacate, pepino e cenoura, uma refeição saudável e energética.", calories: 350 },
+  { name: "Peito de Frango com Purê de Batata Doce", description: "Peito de frango grelhado com purê de batata doce e legumes, ótima opção de almoço pós-treino.", calories: 380 },
+  { name: "Arroz Integral com Carne Moída Magra", description: "Arroz integral com carne moída magra, brócolis e cenoura, uma refeição balanceada e rica em proteínas.", calories: 400 },
+  { name: "Salmão Grelhado com Aspargos", description: "Salmão grelhado com aspargos, ideal para uma refeição rica em ômega-3 e proteínas.", calories: 420 },
+  { name: "Tacos de Alface com Frango", description: "Tacos de alface com frango desfiado, tomate, cebola e molho de iogurte, uma opção leve e deliciosa.", calories: 350 },
+  { name: "Bowl de Arroz Integral com Ovo Pochê", description: "Bowl de arroz integral com ovo pochê, abacate e vegetais, nutritivo e energizante.", calories: 370 },
+  { name: "Frango Assado com Batata Doce e Brócolis", description: "Frango assado com batata doce e brócolis, rica em proteínas e carboidratos saudáveis.", calories: 400 },
+  { name: "Salada de Lentilha com Legumes", description: "Salada de lentilha com cenoura, pepino, tomate e molho de limão, rica em fibras e proteínas vegetais.", calories: 300 },
+  { name: "Salmão ao Forno com Abobrinha", description: "Salmão ao forno com abobrinha e legumes, uma refeição leve e rica em ômega-3.", calories: 380 },
+  { name: "Carne de Panela com Legumes", description: "Carne de panela com legumes variados como cenoura, batata e abobrinha, uma refeição saborosa e nutritiva.", calories: 450 },
+  { name: "Pão Integral por fatia", description: "Pão integral, feito com farinha de trigo integral, rico em fibras e nutrientes.", calories: 120  },
+  { name: "Pão de Abóbora por fatia", description: "Pão caseiro de abóbora, leve e nutritivo, com um sabor suave e adoçado naturalmente.", calories: 150  },
+  { name: "Pão de Alho por porção", description: "Pão de alho crocante, perfeito para acompanhar churrascos e refeições familiares.", calories: 180  },
+  { name: "Pão de Centeio por fatia }", description: "Pão de centeio com uma textura densa, rico em fibras e com baixo índice glicêmico.", calories: 130  },
+  { name: "Pão de Queijo  por unidade ", description: "Pão de queijo tradicional, sem glúten, delicioso e recheado com queijo.", calories: 200  },
+  { name: "Pão Sírio por unidade", description: "Pão sírio macio, ideal para ser recheado com carnes, vegetais e outros ingredientes.", calories: 160  },
+  { name: "Pão de Milho por fatia", description: "Pão de milho caseiro, suave e com um toque adocicado, excelente para acompanhamentos.", calories: 140 },
+  { name: "Pão de Chia por fatia", description: "Pão de chia, uma opção saudável com alto teor de fibras e ômega-3.", calories: 140  },
+  { name: "Molho Pesto por porção", description: "Molho pesto tradicional, feito com manjericão fresco, alho, azeite e queijo parmesão.", calories: 180  },
+  { name: "Molho de Tomate Caseiro por porção ", description: "Molho de tomate caseiro, sem conservantes, ideal para massas e sanduíches.", calories: 90  },
+];
+    // Função para buscar e filtrar receitas conforme o texto digitado
+    function searchRecipes() {
+      const searchQuery = document.getElementById("search").value.toLowerCase();  // Captura o valor digitado na barra de pesquisa
+      const filteredRecipes = recipes.filter(recipe => recipe.name.toLowerCase().includes(searchQuery));  // Filtra receitas com base na pesquisa
+
+      const recipeList = document.getElementById("recipe-list");  // Seleciona a div onde as receitas serão exibidas
+      recipeList.innerHTML = "";  // Limpa a lista de receitas exibidas antes de adicionar novas
+
+      // Para cada receita filtrada, cria um card com o nome, descrição e calorias
+      filteredRecipes.forEach(recipe => {
+        const recipeCard = document.createElement("div");
+        recipeCard.classList.add("recipe-card");
+        recipeCard.innerHTML = `
+          <h3>${recipe.name}</h3>
+          <p>${recipe.description}</p>
+          <p><strong>Calorias:</strong> ${recipe.calories} kcal</p>
+        `;
+        recipeList.appendChild(recipeCard);  // Adiciona o card de receita à lista
+      });
+    }
+  </script>
+
+</body>
+</html>
