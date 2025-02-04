@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypex Trainer</title>
+    <style>
+        body {
+            background-color: #18181b;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+        header {
+            background-color: #262626;
+            padding: 15px 0;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: rgb(9, 255, 0);
+        }
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+        #part1 img {
+            width: 350px;
+            max-width: 100%;
+        }
+        #part2 {
+            background-color: #262626;
+            padding: 40px;
+            border-radius: 15px;
+            width: 300px;
+        }
+        #part2 h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        #part2 input, #part2 select, #part2 button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            background-color: #18181b;
+            color: white;
+        }
+        #part2 button {
+            cursor: pointer;
+            background-color: rgb(9, 255, 0);
+
+        }
+        #part2 button:hover {
+            background-color: rgb(24, 156, 19);
+            color: black;
+        }
+        #resultado {
+            margin-top: 15px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div id="part1">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="calculadora.html">Agua</a></li>
+                    <li><a href="calculadora2.html">Calorias</a></li>
+                    <li><a href="index.html">Voltar</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div id="container">
+            <div id="part1">
+                <img src="undraw_hamburger_falh (1).svg" alt="Imagem Ilustrativa">
+            </div>
+        
+            <div id="part2">
+                <h1>calcular</h1>
+                <input type="number" id="peso" name="peso" placeholder="Ex:70kg">
+                <input type="number" id="idade" name="idade" placeholder="Ex:15 anos">
+                <input type="number" id="altura" name="altura" placeholder="Ex:1.75 metros">
+                <select id="estilo">
+                    <option value="Sedentário">Sedentário (pouco ou nenhum exercício)</option>
+                    <option value="Levemente ativo">Levemente ativo (exercício leve 1-3x por semana)</option>
+                    <option value="Moderadamente ativo">Moderadamente ativo (exercício moderado 3-5x por semana)</option>
+                    <option value="Muito ativo">Muito ativo (exercício intenso 6-7x por semana)</option>
+                    <option value="Extremamente ativo">Extremamente ativo (trabalho físico pesado ou atleta)</option>
+                </select>
+                <br>
+                <button onclick="calcular()">Calcular</button>
+                <p id="resultado">Resultado: ---</p>
+            </div>
+        </div>
+
+        <script>
+            function calcular() {
+                let peso = parseFloat(document.getElementById("peso").value);
+                let idade = parseFloat(document.getElementById("idade").value);
+                let altura = parseFloat(document.getElementById("altura").value) * 100; // Converter metros para cm
+                let estilo = document.getElementById("estilo").value;
+                let resultado = 0;
+        
+                if (peso > 0 && idade > 0 && altura > 0) {
+                    resultado = (10 * peso) + (6.25 * altura) - (5 * idade) + 5;
+        
+                    if (estilo === "Sedentário") resultado *= 1.2;
+                    if (estilo === "Levemente ativo") resultado *= 1.375;
+                    if (estilo === "Moderadamente ativo") resultado *= 1.55;
+                    if (estilo === "Muito ativo") resultado *= 1.725;
+                    if (estilo === "Extremamente ativo") resultado *= 1.9;
+        
+                    document.getElementById("resultado").textContent = "Resultado: " + resultado.toFixed(2) + " calorias";
+                } else {
+                    document.getElementById("resultado").textContent = "Digite um valor válido!";
+                }
+            }
+        </script>
+        
+        
+        
+    
+</body>
+</html>

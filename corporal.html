@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Corporal</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #18181b;
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        header {
+            background-color: #262626;
+            padding: 20px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: rgb(9, 255, 0);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+        .container {
+            background-color: #262626;
+            padding: 40px;
+            border-radius: 18px;
+            width: 400px;
+            margin-top: 40px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            background-color: #18181b;
+            color: white;
+            font-size: 16px;
+        }
+        button {
+            cursor: pointer;
+            background-color: rgb(9, 255, 0);
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: rgb(24, 156, 19);
+        }
+        #resultado {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        .loading {
+            font-size: 18px;
+            color: #999;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Calculadora Corporal</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">voltar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <input type="number" id="peso" placeholder="Peso (kg)" required>
+        <input type="number" id="altura" placeholder="Altura (cm)" required>
+        <input type="number" id="idade" placeholder="Idade (anos)" required>
+        
+        <select id="genero" required>
+            <option value="masculino">Masculino</option>
+            <option value="feminino">Feminino</option>
+        </select>
+
+        <select id="pratica1" required>
+            <option value="sim">Pratica Exercícios?</option>
+            <option value="sim">Sim</option>
+            <option value="nao">Não</option>
+        </select>
+
+        <input type="number" id="pratica" placeholder="Quantas vezes por semana?" required>
+
+        <select id="composicao" required>
+            <option value="Endomorfo">Endomorfo</option>
+            <option value="Ectomorfo">Ectomorfo</option>
+            <option value="Mesoformo">Mesoformo</option>
+        </select>
+
+        <select id="cirurgia" required>
+            <option value="sim">Já fez cirurgia?</option>
+            <option value="sim">Sim</option>
+            <option value="nao">Não</option>
+        </select>
+
+        <select id="objetivo" required>
+            <option value="hipertrofia">Hipertrofia (ganho de massa muscular)</option>
+            <option value="emagrecimento">Emagrecimento</option>
+            <option value="saude">Saúde e Bem-Estar</option>
+        </select>
+
+        <button type="button" onclick="calcular()">Calcular</button>
+
+        <div id="resultado" class="hidden">
+            <h3>Resultado</h3>
+            <div id="resultadopeso"></div>
+            <br>
+            <div id="resultadoaltura"></div>
+            <br>
+            <div id="resultadoidade"></div>
+            <br>
+            <div id="resultadogenero"></div>
+            <br>
+            <div id="resultadopratica1"></div>
+            <br>
+            <div id="resultadopratica"></div>
+            <br>
+            <div id="resultadocomposicao"></div>
+            <br>
+            <div id="resultadocirurgia"></div>
+            <br>
+            <div id="resultadoobjetivo"></div>
+            <br>
+            <div id="resultadoImc"></div>
+            <div id="dicas"></div>
+        </div>
+    </div>
+
+    <script>
+        function calcular() {
+            let peso = document.getElementById('peso').value;
+            let altura = document.getElementById('altura').value;
+            let idade = document.getElementById('idade').value;
+            let genero = document.getElementById('genero').value;
+            let pratica1 = document.getElementById('pratica1').value;
+            let pratica = document.getElementById('pratica').value;
+            let composicao = document.getElementById('composicao').value;
+            let cirurgia = document.getElementById('cirurgia').value;
+            let objetivo = document.getElementById('objetivo').value;
+
+            // Corrigindo o cálculo do IMC
+            altura = altura / 100; // Converter altura de cm para metros
+            let imc = peso / (altura * altura);
+            let resultadoPeso = "Peso: " + peso + " Kg";
+            let resultadoPratica = "Quantas Vezes por semana: " + pratica;
+            let resultadoGenero = "Gênero: " + genero;
+            let resultadoAltura = "Altura: " + altura + " metros";
+            let resultadoIdade = "Idade: " + idade + " anos";
+            let resultadoPratica1 = "Pratica Exercícios: " + pratica1;
+            let resultadoComposicao = "Tipo de Composição Corporal: " + composicao;
+            let resultadoCirurgia = "Já fez cirurgia: " + cirurgia;
+            let resultadoObjetivo = "Objetivo: " + objetivo;
+            let resultadoImc = "IMC: " + imc.toFixed(2);
+
+            // Exibir os resultados
+            document.getElementById("resultadoImc").textContent = resultadoImc;
+            document.getElementById("resultadopratica").textContent = resultadoPratica;
+            document.getElementById("resultadopeso").textContent = resultadoPeso;
+            document.getElementById("resultadogenero").textContent = resultadoGenero;
+            document.getElementById("resultadoaltura").textContent = resultadoAltura;
+            document.getElementById("resultadoidade").textContent = resultadoIdade;
+            document.getElementById("resultadopratica1").textContent = resultadoPratica1;
+            document.getElementById("resultadocomposicao").textContent = resultadoComposicao;
+            document.getElementById("resultadocirurgia").textContent = resultadoCirurgia;
+            document.getElementById("resultadoobjetivo").textContent = resultadoObjetivo;
+
+            // Adicionar dicas personalizadas
+            let dicas = "";
+
+            if (pratica1 === "sim") {
+                dicas += "<p>Ótimo! A prática regular de exercícios é essencial para alcançar seus objetivos de saúde.</p>";
+            } else {
+                dicas += "<p>Considerar iniciar uma rotina de exercícios pode ser um bom passo para melhorar a saúde.</p>";
+            }
+
+            if (composicao === "Endomorfo") {
+                dicas += "<p>Com a composição endomorfa, o foco em exercícios aeróbicos e controle de dieta pode ser importante.</p>";
+            } else if (composicao === "Ectomorfo") {
+                dicas += "<p>Com a composição ectomorfa, foco em alimentação rica em calorias e treino de força é essencial.</p>";
+            } else {
+                dicas += "<p>Com a composição mesomorfa, você tem uma vantagem natural para ganhar músculos, mas a manutenção do treino é importante.</p>";
+            }
+
+            if (objetivo === "hipertrofia") {
+                dicas += "<p>Para hipertrofia, o foco deve ser em treinos de força e uma dieta rica em proteínas.</p>";
+            } else if (objetivo === "emagrecimento") {
+                dicas += "<p>Para emagrecimento, o foco em exercícios aeróbicos e controle calórico é essencial.</p>";
+            } else {
+                dicas += "<p>Para saúde e bem-estar, é importante focar em uma rotina equilibrada de exercícios e alimentação saudável.</p>";
+            }
+            if (imc < 18.5) {
+            dicas += "Dica: Você está abaixo do peso. Tente aumentar a ingestão de calorias e consulte um profissional de saúde para ajustar sua dieta e exercícios.";
+            } else if (imc >= 18.5 && imc <= 24.9) {
+            dicas += "Dica: Seu peso está normal. Continue mantendo um estilo de vida saudável com alimentação balanceada e exercícios regulares!";
+            } else if (imc >= 25 && imc <= 29.9) {
+            dicas= "Dica: Você está em sobrepeso. Tente aumentar a atividade física e melhorar sua alimentação. Consulte um nutricionista para uma dieta adequada.";
+            } else {
+            dicas += "Dica: Você está com obesidade. É importante buscar orientação de um profissional de saúde para criar um plano de emagrecimento adequado.";
+            }
+
+            document.getElementById("dicas").innerHTML = dicas;
+
+            // Remover a classe "hidden" para exibir o resultado
+            document.getElementById("resultado").classList.remove("hidden");
+
+            if (!peso || !altura || !idade || !pratica1 || !pratica || !composicao || !cirurgia || !objetivo) {
+                alert("Por favor, preencha todos os campos!");
+                return;
+            }
+        }
+    </script>
+
+</body>
+</html>
